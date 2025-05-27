@@ -1,0 +1,18 @@
+# backend/config/database.yml
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For Docker, 'db' will be the service name in docker-compose.yml
+  host: db
+  username: postgres # ou um usuário específico para seu banco
+  password: postgres # ou uma senha específica
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: assetflow_development
+
+test:
+  <<: *default
+  database: assetflow_test

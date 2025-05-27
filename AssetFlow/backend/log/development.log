@@ -1,0 +1,61 @@
+  [1m[35mSQL (0.2ms)[0m  [1m[35mSET search_path TO public /*application='Backend'*/[0m
+  [1m[35m (77.2ms)[0m  [1m[35mCREATE DATABASE "assetflow_development" ENCODING = 'unicode' /*application='Backend'*/[0m
+  [1m[35m (19.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY) /*application='Backend'*/[0m
+  [1m[35m (11.5ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4681387222929815790) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (3.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (5.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-05-27 20:50:06.816023', '2025-05-27 20:50:06.816027') RETURNING "key" /*application='Backend'*/[0m
+Migrating to CreateAssets (20250527201956)
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[35mBEGIN /*application='Backend'*/[0m
+  [1m[35m (17.8ms)[0m  [1m[35mCREATE TABLE "assets" ("id" bigserial primary key, "name" character varying, "asset_type" integer, "description" text, "serial_number" character varying, "purchase_date" date, "purchase_price" decimal, "current_value" decimal, "status" integer, "notes" text, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250527201956') RETURNING "version" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (2.7ms)[0m  [1m[35mCOMMIT /*application='Backend'*/[0m
+Migrating to CreateLicenses (20250527202009)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='Backend'*/[0m
+  [1m[35m (14.0ms)[0m  [1m[35mCREATE TABLE "licenses" ("id" bigserial primary key, "asset_id" bigint NOT NULL, "key" character varying, "expiration_date" date, "issued_by" character varying, "notes" text, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_5bdae7c0a6"
+FOREIGN KEY ("asset_id")
+  REFERENCES "assets" ("id")
+) /*application='Backend'*/[0m
+  [1m[35m (4.2ms)[0m  [1m[35mCREATE INDEX "index_licenses_on_asset_id" ON "licenses" ("asset_id") /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250527202009') RETURNING "version" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (4.3ms)[0m  [1m[35mCOMMIT /*application='Backend'*/[0m
+Migrating to CreateLoans (20250527202012)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN /*application='Backend'*/[0m
+  [1m[35m (11.1ms)[0m  [1m[35mCREATE TABLE "loans" ("id" bigserial primary key, "asset_id" bigint NOT NULL, "loaned_to" character varying, "loan_date" date, "return_date" date, "expected_return_date" date, "returned" boolean, "notes" text, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_45faf3852d"
+FOREIGN KEY ("asset_id")
+  REFERENCES "assets" ("id")
+) /*application='Backend'*/[0m
+  [1m[35m (4.1ms)[0m  [1m[35mCREATE INDEX "index_loans_on_asset_id" ON "loans" ("asset_id") /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250527202012') RETURNING "version" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (3.0ms)[0m  [1m[35mCOMMIT /*application='Backend'*/[0m
+Migrating to CreateMaintenances (20250527202026)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*application='Backend'*/[0m
+  [1m[35m (10.1ms)[0m  [1m[35mCREATE TABLE "maintenances" ("id" bigserial primary key, "asset_id" bigint NOT NULL, "maintenance_date" date, "description" text, "cost" decimal, "performed_by" character varying, "notes" text, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_be10298aa0"
+FOREIGN KEY ("asset_id")
+  REFERENCES "assets" ("id")
+) /*application='Backend'*/[0m
+  [1m[35m (3.3ms)[0m  [1m[35mCREATE INDEX "index_maintenances_on_asset_id" ON "maintenances" ("asset_id") /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250527202026') RETURNING "version" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (3.7ms)[0m  [1m[35mCOMMIT /*application='Backend'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(4681387222929815790) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+[ActionDispatch::HostAuthorization::DefaultResponseApp] Blocked hosts: hvx9w2-3001.csb.app
+  [1m[35mSQL (0.4ms)[0m  [1m[35mSET search_path TO public /*application='Backend'*/[0m
+  [1m[35m (178.6ms)[0m  [1m[35mCREATE DATABASE "assetflow_development" ENCODING = 'unicode' /*application='Backend'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4681387222929815790) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (3.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (2.7ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(4681387222929815790) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+[ActionDispatch::HostAuthorization::DefaultResponseApp] Blocked hosts: hvx9w2-3001.csb.app
+[ActionDispatch::HostAuthorization::DefaultResponseApp] Blocked hosts: hvx9w2-3001.csb.app
+[ActionDispatch::HostAuthorization::DefaultResponseApp] Blocked hosts: hvx9w2-3001.csb.app
+  [1m[35m (135.5ms)[0m  [1m[35mCREATE DATABASE "assetflow_development" ENCODING = 'unicode' /*application='Backend'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mSET search_path TO public /*application='Backend'*/[0m
+  [1m[35m (92.5ms)[0m  [1m[35mCREATE DATABASE "assetflow_development" ENCODING = 'unicode' /*application='Backend'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4681387222929815790) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.7ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(4681387222929815790) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m

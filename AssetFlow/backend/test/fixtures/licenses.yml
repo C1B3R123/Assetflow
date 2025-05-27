@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  asset: one
+  key: MyString
+  expiration_date: 2025-05-27
+  issued_by: MyString
+  notes: MyText
+
+two:
+  asset: two
+  key: MyString
+  expiration_date: 2025-05-27
+  issued_by: MyString
+  notes: MyText

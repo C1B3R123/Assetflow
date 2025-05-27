@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  asset: one
+  loaned_to: MyString
+  loan_date: 2025-05-27
+  return_date: 2025-05-27
+  expected_return_date: 2025-05-27
+  returned: false
+  notes: MyText
+
+two:
+  asset: two
+  loaned_to: MyString
+  loan_date: 2025-05-27
+  return_date: 2025-05-27
+  expected_return_date: 2025-05-27
+  returned: false
+  notes: MyText
